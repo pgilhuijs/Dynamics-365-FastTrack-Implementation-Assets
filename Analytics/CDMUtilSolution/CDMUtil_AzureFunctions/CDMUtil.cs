@@ -198,14 +198,14 @@ namespace CDMUtil
             ManifestDefinitions manifestDefinitions = new ManifestDefinitions();
             foreach (var manifest in c.AdlsContext.ManifestDefinitions)
             {
-               
+
                 manifestDefinitions = await ManifestReader.listBlob(c, manifest.ManifestLocation, log);
             }
-            
+
             List<ManifestDefinition> manifests = manifestDefinitions.Manifests;
             dynamic adlsConfig = manifestDefinitions.Config;
 
-           // log.LogInformation(JsonConvert.SerializeObject(manifestDefinitions));
+            // log.LogInformation(JsonConvert.SerializeObject(manifestDefinitions));
             List<SQLMetadata> metadataList = new List<SQLMetadata>();
             List<SQLStatement> statementsList = new List<SQLStatement>();
 
@@ -217,7 +217,7 @@ namespace CDMUtil
                 c.rootFolder = manifest.ManifestLocation;
                 c.manifestName = $"{manifest.ManifestName}.manifest.cdm.json";
                 c.tableList = tableNames;
-               
+
                 await ManifestReader.manifestToSQLMetadata(c, metadataList, log, c.rootFolder);
 
                 log.Log(LogLevel.Information, "Converting metadata to DDL");
@@ -231,9 +231,9 @@ namespace CDMUtil
                     statementsList = await SQLHandler.sqlMetadataToDDL(metadataList, c, log);
                 }
             }
-         
+
             return new OkObjectResult(JsonConvert.SerializeObject(
-                new {CDMMetadata= metadataList, SQLStatements =statementsList}));
+                new { CDMMetadata = metadataList, SQLStatements = statementsList }));
         }
         [FunctionName("getMetadata")]
         public static async Task<IActionResult> getMetadata(
@@ -258,7 +258,7 @@ namespace CDMUtil
        [ServiceBusTrigger("CDMToSynapseView", Connection = "ServiceBusConnection")] dynamic eventGridData, ExecutionContext executionContext,
        ILogger log)
         {
-           
+
             dynamic eventData = eventGridData;
             string ManifestURL = eventData.url;
 
@@ -413,8 +413,8 @@ namespace CDMUtil
             string fileFormat = getConfigurationValue(req, "FileFormat", ManifestURL);
             if (fileFormat != null)
                 AppConfiguration.synapseOptions.fileFormatName = fileFormat;
-            
-            string ParserVersion = getConfigurationValue(req, "ParserVersion", ManifestURL);            
+
+            string ParserVersion = getConfigurationValue(req, "ParserVersion", ManifestURL);
             if (ParserVersion != null)
                 AppConfiguration.synapseOptions.parserVersion = ParserVersion;
 
@@ -429,8 +429,8 @@ namespace CDMUtil
                 AppConfiguration.synapseOptions.DefaultStringLength = Int16.Parse(DefaultStringLength);
             }
 
-            AppConfiguration.SourceColumnProperties = Path.Combine(context.FunctionAppDirectory, "SourceColumnProperties.json");
-            AppConfiguration.ReplaceViewSyntax = Path.Combine(context.FunctionAppDirectory, "ReplaceViewSyntax.json");
+            AppConfiguration.SourceColumnProperties = Path.Combine(context.FunctionAppDirectory, "Manifest", "SourceColumnProperties.json");
+            AppConfiguration.ReplaceViewSyntax = Path.Combine(context.FunctionAppDirectory, "SQL", "ReplaceViewSyntax.json");
 
             string ProcessEntities = getConfigurationValue(req, "ProcessEntities", ManifestURL);
 
@@ -438,8 +438,8 @@ namespace CDMUtil
             {
                 AppConfiguration.ProcessEntities = bool.Parse(ProcessEntities);
             }
-            
-            AppConfiguration.ProcessEntitiesFilePath = Path.Combine(context.FunctionAppDirectory, "EntityList.json");
+
+            AppConfiguration.ProcessEntitiesFilePath = Path.Combine(context.FunctionAppDirectory, "Manifest", "EntityList.json");
 
             string CreateStats = getConfigurationValue(req, "CreateStats", ManifestURL);
 
@@ -453,7 +453,7 @@ namespace CDMUtil
             if (ProcessSubTableSuperTables != null)
             {
                 AppConfiguration.ProcessSubTableSuperTables = bool.Parse(ProcessSubTableSuperTables);
-                AppConfiguration.ProcessSubTableSuperTablesFilePath = Path.Combine(context.FunctionAppDirectory, "SubTableSuperTableList.json");
+                AppConfiguration.ProcessSubTableSuperTablesFilePath = Path.Combine(context.FunctionAppDirectory, "Manifest", "SubTableSuperTableList.json");
 
             }
             string ServicePrincipalBasedAuthentication = getConfigurationValue(req, "ServicePrincipalBasedAuthentication", ManifestURL);
