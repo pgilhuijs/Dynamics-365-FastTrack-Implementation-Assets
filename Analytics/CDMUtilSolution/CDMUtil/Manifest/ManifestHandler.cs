@@ -52,53 +52,6 @@ namespace CDMUtil.Manifest
         public async static Task<ManifestDefinitions> listBlob(AppConfigurations c, string manifestPath, ILogger logger)
         {
 
-            /* List<String> tableList = c.tableList;
-
-             List<TableManifestDefinition> metadataList = new List<TableManifestDefinition>();
-
-             foreach (var blob in filteredBlob)
-             {
-                 string dataPath = blob.Replace(".cdm.json", "");
-                 string[] dataPathParts = dataPath.Split('/');
-                 string[] manifestPathParts = dataPathParts.Take(dataPathParts.Length - 1).ToArray();
-                 string TableName = dataPathParts.Last();
-
-                 if (tableList != null)
-                 {
-                     if (tableList.Count == 0)
-                         break;
-                     else if (tableList.First() != "*" && !tableList.Contains(TableName))
-                         continue;
-                     else
-                         tableList.Remove(TableName);
-                 }
-
-                 TableManifestDefinition metadata = new TableManifestDefinition
-                 {
-                     TableName = dataPathParts.Last(),
-                     DataLocation = dataPath,
-                     ManifestName = dataPathParts[dataPathParts.Length - 2],
-                     ManifestLocation = String.Join("/", manifestPathParts)
-                 };
-
-                 metadataList.Add(metadata);
-             }
-
-             // group  by manifestpath and manifestname 
-             List<ManifestDefinition> manifests = metadataList.GroupBy(c => new { ManifestLocation = c.ManifestLocation, ManifestName = c.ManifestName })
-                                                 .Select(g => new ManifestDefinition
-                                                 {
-                                                     ManifestLocation = g.Key.ManifestLocation,
-                                                     ManifestName = g.Key.ManifestName,
-                                                     Tables = g.Select(table => new Table { TableName = table.TableName }).ToList()
-                                                 }).ToList();
-
-             // logger.LogInformation(JsonConvert.SerializeObject(manifests));
-
-         //    dynamic adlsConfig = JsonConvert.DeserializeObject(manifestHandler.cdmCorpus.Storage.FetchAdapter(manifestHandler.cdmCorpus.Storage.DefaultNamespace).FetchConfig());
-
-             var mds = new ManifestDefinitions() { Tables = metadataList, Manifests = manifests, Config = adlsConfig };
-            */
             return null;
         }
         public static List<string> getSubManifestDefinitions(AppConfigurations c, List<ManifestDefinition> manifestDefinitions, ILogger logger)
