@@ -51,7 +51,6 @@ namespace CDMUtil.Manifest
         }
         public async static Task<ManifestDefinitions> listBlob(AppConfigurations c, string manifestPath, ILogger logger)
         {
-
             return null;
         }
         public static List<string> getSubManifestDefinitions(AppConfigurations c, List<ManifestDefinition> manifestDefinitions, ILogger logger)
@@ -68,7 +67,6 @@ namespace CDMUtil.Manifest
 
                     if (manifest == null)
                     {
-                        logger.LogError($"Manifest: {manifestDef.ManifestName} at Location {manifestDef.ManifestLocation} is invalid");
                         break;
                     }
 
@@ -80,7 +78,6 @@ namespace CDMUtil.Manifest
                         string subManifestRoot = manifestDef.ManifestLocation + '/' + subManifestName;
                         logger.LogInformation($"Sub-Manifest:{subManifestRoot}");
                         blobs.AddRange(manifestHandler.cdmCorpus.Storage.FetchAdapter(manifestHandler.cdmCorpus.Storage.DefaultNamespace).FetchAllFilesAsync("/").Result);
-
                     }
 
                 }
@@ -115,7 +112,6 @@ namespace CDMUtil.Manifest
 
                     if (manifest == null)
                     {
-                        logger.LogError($"Manifest: {manifestName} at Location {localRoot} is invalid");
                         return false;
                     }
 
@@ -255,7 +251,6 @@ namespace CDMUtil.Manifest
 
                 if (manifest == null)
                 {
-                    logger.LogError($"Manifest: {manifestName} at Location {localRoot} is invalid");
                     return false;
                 }
 
@@ -273,7 +268,6 @@ namespace CDMUtil.Manifest
                 }
 
                 logger.LogInformation($"Manifest:{manifest.Name}");
-
                 foreach (CdmEntityDeclarationDefinition eDef in manifest.Entities)
                 {
                     string entityName = eDef.EntityName;
@@ -287,7 +281,6 @@ namespace CDMUtil.Manifest
                         else
                             tableList.Remove(entityName);
                     }
-
                     var entSelected = manifestHandler.cdmCorpus.FetchObjectAsync<CdmEntityDefinition>(eDef.EntityPath, manifest).Result;
 
                     if (entSelected.ExhibitsTraits.Count() > 1 && entSelected.ExhibitsTraits.Where(x => x.NamedReference == "has.sqlViewDefinition").Count() > 0)
@@ -302,7 +295,6 @@ namespace CDMUtil.Manifest
                             //update view dependencies
                             updateViewDependencies(entityName, viewDefinition, metadataList, c, logger);
                             c.ProcessEntities = true;
-
                         }
                     }
                     else
@@ -358,7 +350,6 @@ namespace CDMUtil.Manifest
                 }
                 updateViewSyntax = true;
             }
-
             // Process sub tables and super tables from list file
             if (parentFolder == localRoot && c.ProcessSubTableSuperTables && !String.IsNullOrEmpty(c.ProcessSubTableSuperTablesFilePath) && File.Exists(c.ProcessSubTableSuperTablesFilePath))
             {
@@ -499,7 +490,6 @@ namespace CDMUtil.Manifest
                 if (traitsCollection != null && traitsCollection.Where(x => x.NamedReference == "is.constrainedList.wellKnown").Count() > 0)
                 {
                     CdmTraitReference trait = cdmAttribute.AppliedTraits.Where(x => x.NamedReference == "is.constrainedList.wellKnown").First() as CdmTraitReference;
-
                     if (trait != null && trait.Arguments.Count > 0)
                     {
                         columnAttribute.dataType = "int32";
@@ -514,7 +504,6 @@ namespace CDMUtil.Manifest
                             }
                         }
                     }
-
                 }
                 columnAttributes.Add(columnAttribute);
             }
